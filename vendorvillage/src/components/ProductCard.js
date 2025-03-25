@@ -4,7 +4,7 @@ import "../styles/ProductCard.css";
 const ProductCard = ({ product }) => {
   return (
     <div className='product-card'>
-      <div className='image-placeholder'>[Image]</div>
+      <img src={product.image} alt={product.name} className='product-image' />
       <div className='product-name'>
         <strong>{product.name}</strong>
       </div>

@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Form, Modal, Alert } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import AddProductForm from "../components/AddProductForm";
+import ProductModal from "../components/ProductModal";
+import ProductTable from "../components/ProductTable";
+import AlertMessage from "../components/AlertMessage";
+import Loader from "../components/Loader";
+import SearchAndFilter from "../components/SearchAndFilter";
+import "../styles/VendorDashboard.css";
 
 const VendorDashboard = ({ vendorId }) => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -13,6 +21,8 @@ const VendorDashboard = ({ vendorId }) => {
     price: "",
     stock: "",
     image: "",
+    category: "",
+    brand: "",
   });
   const [editingProduct, setEditingProduct] = useState({
     _id: "",
@@ -21,28 +31,27 @@ const VendorDashboard = ({ vendorId }) => {
     price: "",
     stock: "",
     image: "",
+    category: "",
+    brand: "",
   });
 
   useEffect(() => {
-    // Only fetch products if vendorId is available
     if (vendorId) {
       fetchProducts();
     }
-  }, [vendorId]); // Add vendorId as a dependency
+  }, [vendorId]);
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
       setError(null);
-      
       const res = await fetch(`http://localhost:5000/api/vendor/vendor-products/${vendorId}`);
-      
       if (!res.ok) {
         throw new Error(`Server responded with status: ${res.status}`);
       }
-      
       const data = await res.json();
       setProducts(data);
+      setFilteredProducts(data); // Set filtered products initially to all products
     } catch (err) {
       console.error("Error fetching products:", err);
       setError("Failed to load products. Please try again later.");
@@ -64,15 +73,15 @@ const VendorDashboard = ({ vendorId }) => {
         throw new Error(errorData.error || "Failed to add product");
       }
 
-      // Reset form
       setNewProduct({
         name: "",
         description: "",
         price: "",
         stock: "",
         image: "",
+        category: "",
+        brand: "",
       });
-      
       fetchProducts();
       setShowModal(false);
     } catch (err) {
@@ -83,14 +92,14 @@ const VendorDashboard = ({ vendorId }) => {
 
   const handleDeleteProduct = async (productId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/vendor/delete-product/${productId}`, { 
-        method: "DELETE" 
+      const res = await fetch(`http://localhost:5000/api/vendor/delete-product/${productId}`, {
+        method: "DELETE",
       });
-      
+
       if (!res.ok) {
         throw new Error("Failed to delete product");
       }
-      
+
       fetchProducts();
     } catch (err) {
       console.error("Error deleting product:", err);
@@ -106,6 +115,8 @@ const VendorDashboard = ({ vendorId }) => {
       price: product.price,
       stock: product.stock,
       image: product.image || "",
+      category: product.category || "",
+      brand: product.brand || "",
     });
     setShowEditModal(true);
   };
@@ -115,12 +126,7 @@ const VendorDashboard = ({ vendorId }) => {
       const res = await fetch(`http://localhost:5000/api/vendor/update-product/${editingProduct._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          price: editingProduct.price,
-          stock: editingProduct.stock,
-          name: editingProduct.name,
-          description: editingProduct.description
-        }),
+        body: JSON.stringify(editingProduct),
       });
 
       if (!res.ok) {
@@ -136,165 +142,66 @@ const VendorDashboard = ({ vendorId }) => {
     }
   };
 
+  const handleSearchAndFilter = (searchQuery, filterCategory) => {
+    let filtered = products;
+
+    if (searchQuery) {
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (filterCategory && filterCategory !== "All") {
+      filtered = filtered.filter(product =>
+        product.category === filterCategory
+      );
+    }
+
+    setFilteredProducts(filtered);
+  };
+
   if (!vendorId) {
-    return <Alert variant="warning">User ID not available. Please sign in again.</Alert>;
+    return <AlertMessage message="User ID not available. Please sign in again." variant="warning" />;
   }
 
   return (
     <div className="container mt-4">
-      <h2>Vendor Dashboard</h2>
-      <p>Vendor ID: {vendorId}</p>
+      <div className="dashboard-header">
+        <h2>Vendor Dashboard</h2>
+        <SearchAndFilter onSearchAndFilter={handleSearchAndFilter} />
+      </div>
 
       <Button onClick={() => setShowModal(true)}>Add Product</Button>
 
-      {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
+      {error && <AlertMessage message={error} variant="danger" />}
 
       {loading ? (
-        <p className="mt-3">Loading products...</p>
+        <Loader />
       ) : (
-        <Table striped bordered hover className="mt-3">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.length === 0 ? (
-              <tr>
-                <td colSpan="4" className="text-center">No products found</td>
-              </tr>
-            ) : (
-              products.map((product) => (
-                <tr key={product._id}>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-                  <td>{product.stock}</td>
-                  <td>
-                    <Button 
-                      variant="primary" 
-                      className="me-2" 
-                      onClick={() => handleEditClick(product)}
-                    >
-                      Edit
-                    </Button>
-                    <Button 
-                      variant="danger" 
-                      onClick={() => handleDeleteProduct(product._id)}
-                    >
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
+        <ProductTable
+          products={filteredProducts}
+          onEditClick={handleEditClick}
+          onDeleteClick={handleDeleteProduct}
+        />
       )}
 
       {/* Add Product Modal */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Product</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={newProduct.name}
-                onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                value={newProduct.description}
-                onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="number"
-                value={newProduct.price}
-                onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Stock</Form.Label>
-              <Form.Control
-                type="number"
-                value={newProduct.stock}
-                onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleAddProduct}>
-            Add Product
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ProductModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        title="Add Product"
+        formContent={<AddProductForm product={newProduct} onChange={(field, value) => setNewProduct({ ...newProduct, [field]: value })} />}
+        onSubmit={handleAddProduct}
+      />
 
       {/* Edit Product Modal */}
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Product</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={editingProduct.name}
-                onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                value={editingProduct.description}
-                onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="number"
-                value={editingProduct.price}
-                onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Stock</Form.Label>
-              <Form.Control
-                type="number"
-                value={editingProduct.stock}
-                onChange={(e) => setEditingProduct({ ...editingProduct, stock: e.target.value })}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleUpdateProduct}>
-            Update Product
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ProductModal
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        title="Edit Product"
+        formContent={<AddProductForm product={editingProduct} onChange={(field, value) => setEditingProduct({ ...editingProduct, [field]: value })} />}
+        onSubmit={handleUpdateProduct}
+      />
     </div>
   );
 };
