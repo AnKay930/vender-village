@@ -22,6 +22,8 @@ const dummyProducts = [
   { id: 3, name: "Denim Jacket", price: 60, category: "Clothing", rating: 4.5 },
   {
     id: 4,
+    image:
+      "https://www.nerdwallet.com/assets/blog/wp-content/uploads/2023/11/Screenshot-2023-10-26-at-7.20.37-PM-600x360.png",
     name: "Leather Belt",
     price: 30,
     category: "Accessories",
