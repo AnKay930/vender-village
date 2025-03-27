@@ -51,7 +51,7 @@ const VendorDashboard = ({ vendorId }) => {
       }
       const data = await res.json();
       setProducts(data);
-      setFilteredProducts(data); // Set filtered products initially to all products
+      setFilteredProducts(data);
     } catch (err) {
       console.error("Error fetching products:", err);
       setError("Failed to load products. Please try again later.");
@@ -168,7 +168,9 @@ const VendorDashboard = ({ vendorId }) => {
     <div className="container mt-4">
       <div className="dashboard-header">
         <h2>Vendor Dashboard</h2>
-        <SearchAndFilter onSearchAndFilter={handleSearchAndFilter} />
+        <div className="search-filter-container">
+          <SearchAndFilter onSearchAndFilter={handleSearchAndFilter} />
+        </div>
       </div>
 
       <Button onClick={() => setShowModal(true)}>Add Product</Button>
