@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/Filters.css";
 
-const Filters = ({ filters, onChange }) => {
+const Filters = ({ filters, onChange, maxPrice }) => {
   const toggleCategory = (category) => {
     const updated = filters.categories.includes(category)
       ? filters.categories.filter((c) => c !== category)
@@ -17,18 +17,42 @@ const Filters = ({ filters, onChange }) => {
       <label>
         <input
           type='checkbox'
-          checked={filters.categories.includes("Clothing")}
-          onChange={() => toggleCategory("Clothing")}
+          checked={filters.categories.includes("T-shirts")}
+          onChange={() => toggleCategory("T-shirts")}
         />
-        Clothing
+        T-shirts
       </label>
       <label>
         <input
           type='checkbox'
-          checked={filters.categories.includes("Accessories")}
-          onChange={() => toggleCategory("Accessories")}
+          checked={filters.categories.includes("Shoes")}
+          onChange={() => toggleCategory("Shoes")}
         />
-        Accessories
+        Shoes
+      </label>
+      <label>
+        <input
+          type='checkbox'
+          checked={filters.categories.includes("Caps")}
+          onChange={() => toggleCategory("Caps")}
+        />
+        Caps
+      </label>
+      <label>
+        <input
+          type='checkbox'
+          checked={filters.categories.includes("Sunglasses")}
+          onChange={() => toggleCategory("Sunglasses")}
+        />
+        Sunglasses
+      </label>
+      <label>
+        <input
+          type='checkbox'
+          checked={filters.categories.includes("Watches")}
+          onChange={() => toggleCategory("Watches")}
+        />
+        Watches
       </label>
 
       <div style={{ marginTop: "20px" }}>
@@ -36,7 +60,7 @@ const Filters = ({ filters, onChange }) => {
         <input
           type='range'
           min='0'
-          max='100'
+          max={maxPrice}
           value={filters.price}
           onChange={(e) => onChange({ price: Number(e.target.value) })}
         />
