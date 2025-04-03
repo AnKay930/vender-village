@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "@clerk/backend": "^1.25.0",
+    "@clerk/clerk-sdk-node": "^5.1.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "env": "^0.0.2",
+    "express": "^4.21.2",
+    "mongoose": "^8.10.0",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.9"
+  },
+  "scripts": {
+    "start": "nodemon server.js"
+  }
+}

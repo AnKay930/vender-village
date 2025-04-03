@@ -1,0 +1,45 @@
+.search-filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.search-group {
+  display: flex;
+  flex-grow: 1; /* Ensures it takes full width */
+  max-width: 100%;
+}
+
+.search-input {
+  flex-grow: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-right: none; /* Merge with dropdown */
+  border-radius: 5px 0 0 5px;
+}
+
+.category-select {
+  width: auto;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-left: none; /* Merge with input */
+  border-radius: 0 5px 5px 0;
+}
+
+.search-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
