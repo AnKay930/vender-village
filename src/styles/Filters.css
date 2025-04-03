@@ -1,0 +1,40 @@
+.filters {
+  width: 250px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", sans-serif;
+  font-size: 15px;
+}
+
+.filters h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.filters strong {
+  display: block;
+  margin: 20px 0 8px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.filters label {
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.filters input[type="checkbox"],
+.filters input[type="radio"] {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.filters input[type="range"] {
+  width: 100%;
+  margin-top: 10px;
+}
