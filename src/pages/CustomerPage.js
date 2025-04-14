@@ -9,6 +9,7 @@ const CustomerPage = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
 
   const [filters, setFilters] = useState({
     categories: [],
@@ -66,12 +67,21 @@ const CustomerPage = () => {
   return (
     <div className='customer-page'>
       <Navbar />
+      <div className='filter-toggle'>
+        <button onClick={() => setShowFilters(!showFilters)}>
+          {showFilters ? "Hide Filters" : "Show Filters"}
+        </button>
+      </div>
+
       <div className='main-content'>
-        <Filters
-          filters={filters}
-          onChange={handleFilterChange}
-          maxPrice={maxPrice}
-        />
+        <div className={`filter-wrapper ${showFilters ? "open" : "collapsed"}`}>
+          <Filters
+            filters={filters}
+            onChange={handleFilterChange}
+            maxPrice={maxPrice}
+          />
+        </div>
+
         <div className='products-section'>
           {loading ? (
             <p>Loading products...</p>

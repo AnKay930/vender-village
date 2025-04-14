@@ -1,5 +1,6 @@
 .product-card {
-  width: 220px;
+  width: 100%;
+  max-width: 220px;
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -10,6 +11,7 @@
   align-items: center;
   height: 370px;
   transition: transform 0.2s ease-in-out;
+  box-sizing: border-box;
 }
 
 .product-card:hover {
@@ -57,4 +59,10 @@
   object-fit: contain;
   border-radius: 8px;
   margin-bottom: 12px;
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .product-card {
+    padding: 20px;
+  }
 }
