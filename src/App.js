@@ -17,6 +17,7 @@ import AdminPage from "./pages/AdminPage";
 import CustomerPage from "./pages/CustomerPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Header from "./components/Header";
+import Homepage from "./pages/Homepage"; // Added
 import "bootstrap/dist/css/bootstrap.min.css";
 import AddUser from "./pages/AddUser";
 import ViewUsers from "./pages/ViewUser";
@@ -28,7 +29,6 @@ import CheckoutPage from "./pages/Checkout";
 import OrderHistory from "./pages/OrderHistory";
 import ProductDetail from "./pages/ProductDetail";
 
-// Toastify imports
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -71,15 +71,14 @@ const AppRoutes = () => {
     fetchUserRole();
   }, [isSignedIn, userId]);
 
-  if (!isLoaded) {
-    return null;
-  }
+  if (!isLoaded) return null;
 
   return userRole === "customer" ? (
     <CartProvider userId={userId}>
       <>
         <Header userRole="customer" />
         <Routes>
+          <Route path="/" element={<Homepage />} /> {/* Added */}
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route
@@ -142,6 +141,7 @@ const AppRoutes = () => {
     <>
       <Header userRole={userRole} />
       <Routes>
+        <Route path="/" element={<Homepage />} /> {/* Added */}
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route

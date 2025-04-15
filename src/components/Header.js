@@ -65,7 +65,7 @@ const Header = () => {
               {userRole === "customer" && (
                 <>
                   <Link to="/customer" className="nav-link fw-medium">
-                    Customer Page
+                    Products
                   </Link>
                   <Link to="/order-history" className="nav-link fw-medium">
                     Order History
