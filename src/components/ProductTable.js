@@ -1,9 +1,55 @@
 import React from "react";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Card } from "react-bootstrap";
+import "../styles/VendorDashboard.css";
 
 const ProductTable = ({ products, onEditClick, onDeleteClick }) => {
+  const isMobileView = window.innerWidth <= 768;
+
+  if (isMobileView) {
+    return (
+      <div className="product-cards-container">
+        {products.length === 0 ? (
+          <p className="text-center">No products found</p>
+        ) : (
+          products.map((product) => (
+            <Card key={product._id} className="mb-3 shadow-sm">
+              <Card.Body>
+                <Card.Title className="fw-bold">{product.name}</Card.Title>
+                <Card.Text>
+                  <strong>Category:</strong> {product.category}
+                  <br />
+                  <strong>Brand:</strong> {product.brand}
+                  <br />
+                  <strong>Price:</strong> ${product.price}
+                  <br />
+                  <strong>Stock:</strong> {product.stock}
+                </Card.Text>
+                <div className="d-flex justify-content-between mt-3">
+                  <Button
+                    variant="primary"
+                    className="me-2"
+                    onClick={() => onEditClick(product)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => onDeleteClick(product._id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
+          ))
+        )}
+      </div>
+    );
+  }
+
+  // Desktop Table Layout
   return (
-    <Table striped bordered hover>
+    <Table striped bordered hover className="product-table">
       <thead>
         <tr>
           <th>Name</th>
@@ -17,7 +63,9 @@ const ProductTable = ({ products, onEditClick, onDeleteClick }) => {
       <tbody>
         {products.length === 0 ? (
           <tr>
-            <td colSpan="6" className="text-center">No products found</td>
+            <td colSpan="6" className="text-center">
+              No products found
+            </td>
           </tr>
         ) : (
           products.map((product) => (
@@ -28,8 +76,19 @@ const ProductTable = ({ products, onEditClick, onDeleteClick }) => {
               <td>${product.price}</td>
               <td>{product.stock}</td>
               <td>
-                <Button variant="primary" className="me-2" onClick={() => onEditClick(product)}>Edit</Button>
-                <Button variant="danger" onClick={() => onDeleteClick(product._id)}>Delete</Button>
+                <Button
+                  variant="primary"
+                  className="me-2"
+                  onClick={() => onEditClick(product)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => onDeleteClick(product._id)}
+                >
+                  Delete
+                </Button>
               </td>
             </tr>
           ))

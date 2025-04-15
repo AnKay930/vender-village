@@ -8,7 +8,7 @@
   margin: 0 auto;
 }
 
-.search-group {
+.search-wrapper {
   display: flex;
   flex-grow: 1; /* Ensures it takes full width */
   max-width: 100%;
@@ -42,4 +42,31 @@
   font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
+}
+
+/* Mobile View: Stack Input, Dropdown, and Button Vertically */
+@media (max-width: 768px) {
+  .search-filter-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-wrapper {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .search-input,
+  .category-select,
+  .search-button {
+    width: 100%;
+    border-radius: 5px;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+  }
+
+  .search-button {
+    margin-left: 0;
+  }
 }

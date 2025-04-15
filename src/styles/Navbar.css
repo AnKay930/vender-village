@@ -23,3 +23,9 @@
   font-weight: 500;
   cursor: pointer;
 }
+
+.badge {
+  font-size: 0.75rem;
+  padding: 3px 6px;
+}
+
