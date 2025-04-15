@@ -6,8 +6,10 @@ import {
   SignInButton,
 } from "@clerk/clerk-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RoleSelectionModal from "./RoleSelectionModal";
+import { useCart } from "../context/cartContext";
 
 const Header = () => {
   const { isSignedIn, user } = useUser();
@@ -15,6 +17,13 @@ const Header = () => {
   const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const cartContext = useCart();
+  const cart = cartContext?.cart || { items: [] };
+  const cartItemCount = cart.items.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -44,25 +53,32 @@ const Header = () => {
   }, [isSignedIn, user, userRole, navigate, location.pathname]);
 
   return (
-    <header className="navbar navbar-light bg-light p-3">
-      <div className="container-fluid d-flex justify-content-between align-items-center">
-        <h1 className="navbar-brand mb-0">Vendor Village</h1>
+    <header className="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3">
+      <div className="container-fluid d-flex flex-wrap justify-content-between align-items-center">
+        <Link to="/" className="navbar-brand fs-4 fw-bold text-primary mb-2 mb-lg-0">
+          Vendor Village
+        </Link>
 
-        <nav className="d-flex justify-content-center flex-grow-1">
+        <nav className="d-flex flex-wrap justify-content-center align-items-center gap-3">
           {isSignedIn && userRole && (
             <>
               {userRole === "customer" && (
-                <Link to="/customer" className="nav-link mx-2">
-                  Customer Page
-                </Link>
+                <>
+                  <Link to="/customer" className="nav-link fw-medium">
+                    Customer Page
+                  </Link>
+                  <Link to="/order-history" className="nav-link fw-medium">
+                    Order History
+                  </Link>
+                </>
               )}
               {userRole === "vendor" && (
-                <Link to="/vendor" className="nav-link mx-2">
+                <Link to="/vendor" className="nav-link fw-medium">
                   Vendor Page
                 </Link>
               )}
               {userRole === "admin" && (
-                <Link to="/admin" className="nav-link mx-2">
+                <Link to="/admin" className="nav-link fw-medium">
                   Admin Page
                 </Link>
               )}
@@ -70,9 +86,20 @@ const Header = () => {
           )}
         </nav>
 
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center gap-3 mt-2 mt-lg-0">
+          {isSignedIn && userRole === "customer" && (
+            <Link to="/cart" className="position-relative text-dark me-2">
+              <FaShoppingCart size={22} />
+              {cartItemCount > 0 && (
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {cartItemCount}
+                </span>
+              )}
+            </Link>
+          )}
+
           {isSignedIn ? (
-            <div className="dropdown">
+            <div className="d-flex align-items-center">
               <UserButton />
               <ul className="dropdown-menu">
                 <li>
@@ -85,10 +112,10 @@ const Header = () => {
           ) : (
             <>
               <SignInButton mode="modal">
-                <button className="btn btn-primary me-2">Login</button>
+                <button className="btn btn-outline-primary">Login</button>
               </SignInButton>
               <button
-                className="btn btn-success"
+                className="btn btn-primary"
                 onClick={() => setShowSignUpModal(true)}
               >
                 Sign Up

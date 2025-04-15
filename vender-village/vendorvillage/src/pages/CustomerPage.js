@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar from "../components/Navbar";
 import Filters from "../components/Filters";
 import ProductCard from "../components/ProductCard";
 import "../styles/CustomerPage.css";
@@ -66,7 +65,6 @@ const CustomerPage = () => {
 
   return (
     <div className='customer-page'>
-      <Navbar />
       <div className='filter-toggle'>
         <button onClick={() => setShowFilters(!showFilters)}>
           {showFilters ? "Hide Filters" : "Show Filters"}

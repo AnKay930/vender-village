@@ -1,0 +1,62 @@
+
+.container {
+    padding: 20px;
+  }
+  
+  /* Product Image Styling */
+  img {
+    border-radius: 12px;
+    object-fit: contain;
+    max-height: 400px;
+  }
+  
+  /* Product Title */
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Product Price */
+  h3 {
+    font-size: 1.7rem;
+    color: #198754; /* Bootstrap's green */
+    margin-bottom: 15px;
+  }
+  
+  /* Description */
+  p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  /* Add to Cart Button */
+  button.btn-dark {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  button.btn-dark:hover {
+    background-color: #333;
+  }
+  
+  /* Responsive Tweaks */
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.6rem;
+    }
+  
+    h3 {
+      font-size: 1.4rem;
+    }
+  
+    img {
+      max-height: 300px;
+    }
+  
+    button.btn-dark {
+      width: 100%;
+    }
+  }
+  

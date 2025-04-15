@@ -5,6 +5,9 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const clerkRoutes = require("./routes/clerkRoutes");
 const vendorRoutes = require("./routes/vendorRoutes");
+const cartRoutes = require("./routes/cartRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+
 dotenv.config();
 
 const app = express();
@@ -31,7 +34,8 @@ connectDB()
 app.use("/api/users", userRoutes);
 app.use("/api/clerk", clerkRoutes);
 app.use("/api/vendor", vendorRoutes);
-
+app.use("/api/cart", cartRoutes);
+app.use("/api/order", orderRoutes);
 app.get("/", (req, res) => {
   res.send("🚀 API is running...");
 });

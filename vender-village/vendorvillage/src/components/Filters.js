@@ -10,92 +10,51 @@ const Filters = ({ filters, onChange, maxPrice }) => {
   };
 
   return (
-    <div className='filters'>
+    <div className="filters">
       <h3>Filters</h3>
 
+      {/* Category Filter */}
       <strong>Category</strong>
-      <label>
-        <input
-          type='checkbox'
-          checked={filters.categories.includes("T-shirts")}
-          onChange={() => toggleCategory("T-shirts")}
-        />
-        T-shirts
-      </label>
-      <label>
-        <input
-          type='checkbox'
-          checked={filters.categories.includes("Shoes")}
-          onChange={() => toggleCategory("Shoes")}
-        />
-        Shoes
-      </label>
-      <label>
-        <input
-          type='checkbox'
-          checked={filters.categories.includes("Caps")}
-          onChange={() => toggleCategory("Caps")}
-        />
-        Caps
-      </label>
-      <label>
-        <input
-          type='checkbox'
-          checked={filters.categories.includes("Sunglasses")}
-          onChange={() => toggleCategory("Sunglasses")}
-        />
-        Sunglasses
-      </label>
-      <label>
-        <input
-          type='checkbox'
-          checked={filters.categories.includes("Watches")}
-          onChange={() => toggleCategory("Watches")}
-        />
-        Watches
-      </label>
+      {["T-shirts", "Shoes", "Caps", "Sunglasses", "Watches"].map(
+        (category) => (
+          <label key={category}>
+            <input
+              type="checkbox"
+              checked={filters.categories.includes(category)}
+              onChange={() => toggleCategory(category)}
+            />
+            {category}
+          </label>
+        )
+      )}
 
+      {/* Price Range Filter */}
       <div style={{ marginTop: "20px" }}>
         <strong>Price Range</strong>
         <input
-          type='range'
-          min='0'
+          type="range"
+          min="0"
           max={maxPrice}
-          value={filters.price}
+          value={filters.price || 0}
           onChange={(e) => onChange({ price: Number(e.target.value) })}
         />
-        <div>Up to ${filters.price}</div>
+        <div>Up to ${filters.price || 0}</div>
       </div>
 
+      {/* Review Filter */}
       <div style={{ marginTop: "20px" }}>
         <strong>Reviews</strong>
-        <label>
-          <input
-            type='radio'
-            name='reviews'
-            checked={filters.reviews === 4}
-            onChange={() => onChange({ reviews: 4 })}
-          />
-          4 Stars & Up
-        </label>
-        <label>
-          <input
-            type='radio'
-            name='reviews'
-            checked={filters.reviews === 3}
-            onChange={() => onChange({ reviews: 3 })}
-          />
-          3 Stars & Up
-        </label>
-        <label>
-          <input
-            type='radio'
-            name='reviews'
-            checked={filters.reviews === 0}
-            onChange={() => onChange({ reviews: 0 })}
-          />
-          All Ratings
-        </label>
+        {[4, 3, 0].map((rating) => (
+          <label key={rating}>
+            <input
+              type="radio"
+              name="reviews"
+              checked={filters.reviews === rating}
+              onChange={() => onChange({ reviews: rating })}
+            />
+            {rating === 0 ? "All Ratings" : `${rating} Stars & Up`}
+          </label>
+        ))}
       </div>
     </div>
   );
