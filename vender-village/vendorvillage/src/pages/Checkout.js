@@ -99,7 +99,7 @@ export default function Checkout() {
             {...register("phone", {
               required: true,
               pattern: {
-                value: /^(\+1\s?)?(\([2-9][0-9]{2}\)|[2-9][0-9]{2})[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}$/,
+                value: /^(\+1\s?)?(\([0-9][0-9]{2}\)|[0-9][0-9]{2})[\s.-]?[0-9]{3}[\s.-]?[0-9]{4}$/,
                 message: "Invalid Canadian phone number",
               },
             })}

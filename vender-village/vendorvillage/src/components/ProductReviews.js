@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useUser } from "@clerk/clerk-react";
 
 const ProductReviews = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
+  const { user } = useUser();
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/products/${productId}/reviews`);
+      const res = await axios.get(
+        `http://localhost:5000/api/products/${productId}/reviews`
+      );
       setReviews(res.data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -25,10 +29,24 @@ const ProductReviews = ({ productId }) => {
         <p>No reviews yet.</p>
       ) : (
         reviews.map((review) => (
-          <div key={review._id} className="border rounded p-2 mb-2">
-            <strong>{review.userName}</strong> rated {review.rating} ★
-            <p>{review.comment}</p>
-            <small>{new Date(review.createdAt).toLocaleDateString()}</small>
+          <div
+            key={review._id}
+            className={`border rounded p-3 mb-3 ${
+              user?.id === review.userId ? "border-primary" : ""
+            }`}
+          >
+            <div className="d-flex justify-content-between">
+              <strong>{review.userName}</strong>
+              <span className="text-warning">{review.rating} ★</span>
+            </div>
+            <p className="mb-1">{review.comment}</p>
+            <small className="text-muted">
+              {new Date(review.createdAt).toLocaleDateString()}
+            </small>
+            {/* Optional: Highlight current user's review */}
+            {user?.id === review.userId && (
+              <span className="badge bg-primary ms-2">Your Review</span>
+            )}
           </div>
         ))
       )}
