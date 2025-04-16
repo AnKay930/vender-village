@@ -2,7 +2,7 @@
   "name": "vendorvillage",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://AnKay930.github.io/vender-village",
+  "homepage": "https://ankay930.github.io/vender-village/",
   "dependencies": {
     "@clerk/clerk-react": "^5.22.11",
     "axios": "^1.8.4",
