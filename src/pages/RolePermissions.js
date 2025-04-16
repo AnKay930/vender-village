@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Alert } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AdminSidebar from "../components/AdminSidebar";
+import { API_BASE } from "../config";
 
 const RolesPermissions = () => {
   const [users, setUsers] = useState([]);
@@ -16,7 +17,7 @@ const RolesPermissions = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users/all-users");
+      const res = await fetch(`${API_BASE}/api/users/all-users`);
       const data = await res.json();
       setUsers(data);
       setUpdatedRoles(
@@ -37,14 +38,11 @@ const RolesPermissions = () => {
     const newRole = updatedRoles[userId];
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/users/update-role/${userId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ role: newRole }),
-        }
-      );
+      const response = await fetch(`${API_BASE}/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: newRole }),
+      });
 
       if (response.ok) {
         setUsers(
@@ -64,14 +62,14 @@ const RolesPermissions = () => {
   };
 
   return (
-    <div className="d-flex">
+    <div className='d-flex'>
       <AdminSidebar />
-      <div className="container-fluid p-4">
+      <div className='container-fluid p-4'>
         <h2>Roles & Permissions</h2>
 
         {showAlert && (
           <Alert
-            variant="success"
+            variant='success'
             dismissible
             onClose={() => setShowAlert(false)}
           >
@@ -100,21 +98,21 @@ const RolesPermissions = () => {
                   <td>{user.role}</td>
                   <td>
                     <select
-                      className="form-control"
+                      className='form-control'
                       value={updatedRoles[user.userId]}
                       onChange={(e) =>
                         handleRoleChange(user.userId, e.target.value)
                       }
                     >
-                      <option value="customer">Customer</option>
-                      <option value="vendor">Vendor</option>
-                      <option value="admin">Admin</option>
+                      <option value='customer'>Customer</option>
+                      <option value='vendor'>Vendor</option>
+                      <option value='admin'>Admin</option>
                     </select>
                   </td>
                   <td>
                     <Button
-                      variant="primary"
-                      size="sm"
+                      variant='primary'
+                      size='sm'
                       onClick={() => updateUserRole(user.userId)}
                     >
                       Update

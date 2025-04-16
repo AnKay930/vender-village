@@ -7,6 +7,7 @@ import AlertMessage from "../components/AlertMessage";
 import Loader from "../components/Loader";
 import SearchAndFilter from "../components/SearchAndFilter";
 import "../styles/VendorDashboard.css";
+import { API_BASE } from "../config";
 
 const VendorDashboard = ({ vendorId }) => {
   const [products, setProducts] = useState([]);
@@ -46,7 +47,7 @@ const VendorDashboard = ({ vendorId }) => {
       setLoading(true);
       setError(null);
       const res = await fetch(
-        `http://localhost:5000/api/vendor/vendor-products/${vendorId}`
+        `${API_BASE}/api/vendor/vendor-products/${vendorId}`
       );
       if (!res.ok) throw new Error("Failed to fetch products.");
       const data = await res.json();
@@ -62,14 +63,11 @@ const VendorDashboard = ({ vendorId }) => {
 
   const handleAddProduct = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/vendor/add-product`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...newProduct, vendorId }),
-        }
-      );
+      const res = await fetch(`${API_BASE}/api/vendor/add-product`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...newProduct, vendorId }),
+      });
       if (!res.ok) throw new Error("Failed to add product.");
       setNewProduct({
         name: "",
@@ -91,7 +89,7 @@ const VendorDashboard = ({ vendorId }) => {
   const handleDeleteProduct = async (productId) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/vendor/delete-product/${productId}`,
+        `${API_BASE}/api/vendor/delete-product/${productId}`,
         {
           method: "DELETE",
         }
@@ -112,7 +110,7 @@ const VendorDashboard = ({ vendorId }) => {
   const handleUpdateProduct = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/vendor/update-product/${editingProduct._id}`,
+        `${API_BASE}/api/vendor/update-product/${editingProduct._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -144,24 +142,24 @@ const VendorDashboard = ({ vendorId }) => {
   if (!vendorId) {
     return (
       <AlertMessage
-        message="User ID not available. Please sign in again."
-        variant="warning"
+        message='User ID not available. Please sign in again.'
+        variant='warning'
       />
     );
   }
 
   return (
-    <div className="container mt-4">
-      <div className="dashboard-header">
+    <div className='container mt-4'>
+      <div className='dashboard-header'>
         <h2>Vendor Dashboard</h2>
         <SearchAndFilter onSearchAndFilter={handleSearchAndFilter} />
       </div>
 
-      <div className="mb-3">
+      <div className='mb-3'>
         <Button onClick={() => setShowModal(true)}>Add Product</Button>
       </div>
 
-      {error && <AlertMessage message={error} variant="danger" />}
+      {error && <AlertMessage message={error} variant='danger' />}
 
       {loading ? (
         <Loader />
@@ -177,7 +175,7 @@ const VendorDashboard = ({ vendorId }) => {
       <ProductModal
         show={showModal}
         onHide={() => setShowModal(false)}
-        title="Add Product"
+        title='Add Product'
         formContent={
           <AddProductForm
             product={newProduct}
@@ -192,7 +190,7 @@ const VendorDashboard = ({ vendorId }) => {
       <ProductModal
         show={showEditModal}
         onHide={() => setShowEditModal(false)}
-        title="Edit Product"
+        title='Edit Product'
         formContent={
           <AddProductForm
             product={editingProduct}

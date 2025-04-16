@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { API_BASE } from "../config";
 
 // Create the context
 const CartContext = createContext();
@@ -17,7 +18,7 @@ const CartProvider = ({ userId, children }) => {
   useEffect(() => {
     if (userId) {
       axios
-        .get(`http://localhost:5000/api/cart/${userId}`)
+        .get(`${API_BASE}/api/cart/${userId}`)
         .then((res) => {
           setCart(res.data || { userId, items: [] });
         })
@@ -34,7 +35,7 @@ const CartProvider = ({ userId, children }) => {
   // Add item to cart
   const addToCart = async (productId, quantity = 1) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/cart/add", {
+      const res = await axios.post(`${API_BASE}/api/cart/add`, {
         userId,
         productId,
         quantity,
@@ -50,7 +51,7 @@ const CartProvider = ({ userId, children }) => {
   // Remove item from cart
   const removeFromCart = async (productId) => {
     try {
-      const res = await axios.delete("http://localhost:5000/api/cart/remove", {
+      const res = await axios.delete(`${API_BASE}/api/cart/remove`, {
         data: { userId, productId },
       });
       setCart(res.data);
@@ -64,7 +65,7 @@ const CartProvider = ({ userId, children }) => {
   // Clear cart
   const clearCart = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/cart/clear/${userId}`);
+      await axios.delete(`${API_BASE}/api/cart/clear/${userId}`);
       setCart({ userId, items: [] });
       toast.warn("Cart cleared.");
     } catch (err) {

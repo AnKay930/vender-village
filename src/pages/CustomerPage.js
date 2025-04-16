@@ -3,6 +3,7 @@ import axios from "axios";
 import Filters from "../components/Filters";
 import ProductCard from "../components/ProductCard";
 import "../styles/CustomerPage.css";
+import { API_BASE } from "../config";
 
 const CustomerPage = () => {
   const [allProducts, setAllProducts] = useState([]);
@@ -18,7 +19,7 @@ const CustomerPage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/products")
+      .get(`${API_BASE}/api/products`)
       .then((res) => {
         setAllProducts(res.data);
         setLoading(false);

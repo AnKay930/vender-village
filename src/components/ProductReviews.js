@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
+import { API_BASE } from "../config";
 
 const ProductReviews = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
@@ -9,7 +10,7 @@ const ProductReviews = ({ productId }) => {
   const fetchReviews = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/products/${productId}/reviews`
+        `${API_BASE}/api/products/${productId}/reviews`
       );
       setReviews(res.data);
     } catch (error) {
@@ -22,7 +23,7 @@ const ProductReviews = ({ productId }) => {
   }, [productId]);
 
   return (
-    <div className="mt-4">
+    <div className='mt-4'>
       <h4>Reviews:</h4>
 
       {reviews.length === 0 ? (
@@ -35,17 +36,17 @@ const ProductReviews = ({ productId }) => {
               user?.id === review.userId ? "border-primary" : ""
             }`}
           >
-            <div className="d-flex justify-content-between">
+            <div className='d-flex justify-content-between'>
               <strong>{review.userName}</strong>
-              <span className="text-warning">{review.rating} ★</span>
+              <span className='text-warning'>{review.rating} ★</span>
             </div>
-            <p className="mb-1">{review.comment}</p>
-            <small className="text-muted">
+            <p className='mb-1'>{review.comment}</p>
+            <small className='text-muted'>
               {new Date(review.createdAt).toLocaleDateString()}
             </small>
             {/* Optional: Highlight current user's review */}
             {user?.id === review.userId && (
-              <span className="badge bg-primary ms-2">Your Review</span>
+              <span className='badge bg-primary ms-2'>Your Review</span>
             )}
           </div>
         ))

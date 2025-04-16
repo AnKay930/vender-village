@@ -10,6 +10,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RoleSelectionModal from "./RoleSelectionModal";
 import { useCart } from "../context/cartContext";
+import { API_BASE } from "../config";
 
 const Header = () => {
   const { isSignedIn, user } = useUser();
@@ -30,7 +31,7 @@ const Header = () => {
       if (isSignedIn && user && !userRole) {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/users/get-user-role?userId=${user.id}`
+            `${API_BASE}/api/users/get-user-role?userId=${user.id}`
           );
           const data = await response.json();
           setUserRole(data.role);
@@ -53,32 +54,35 @@ const Header = () => {
   }, [isSignedIn, user, userRole, navigate, location.pathname]);
 
   return (
-    <header className="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3">
-      <div className="container-fluid d-flex flex-wrap justify-content-between align-items-center">
-        <Link to="/" className="navbar-brand fs-4 fw-bold text-primary mb-2 mb-lg-0">
+    <header className='navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3'>
+      <div className='container-fluid d-flex flex-wrap justify-content-between align-items-center'>
+        <Link
+          to='/'
+          className='navbar-brand fs-4 fw-bold text-primary mb-2 mb-lg-0'
+        >
           Vendor Village
         </Link>
 
-        <nav className="d-flex flex-wrap justify-content-center align-items-center gap-3">
+        <nav className='d-flex flex-wrap justify-content-center align-items-center gap-3'>
           {isSignedIn && userRole && (
             <>
               {userRole === "customer" && (
                 <>
-                  <Link to="/customer" className="nav-link fw-medium">
+                  <Link to='/customer' className='nav-link fw-medium'>
                     Products
                   </Link>
-                  <Link to="/order-history" className="nav-link fw-medium">
+                  <Link to='/order-history' className='nav-link fw-medium'>
                     Order History
                   </Link>
                 </>
               )}
               {userRole === "vendor" && (
-                <Link to="/vendor" className="nav-link fw-medium">
+                <Link to='/vendor' className='nav-link fw-medium'>
                   Vendor Page
                 </Link>
               )}
               {userRole === "admin" && (
-                <Link to="/admin" className="nav-link fw-medium">
+                <Link to='/admin' className='nav-link fw-medium'>
                   Admin Page
                 </Link>
               )}
@@ -86,12 +90,12 @@ const Header = () => {
           )}
         </nav>
 
-        <div className="d-flex align-items-center gap-3 mt-2 mt-lg-0">
+        <div className='d-flex align-items-center gap-3 mt-2 mt-lg-0'>
           {isSignedIn && userRole === "customer" && (
-            <Link to="/cart" className="position-relative text-dark me-2">
+            <Link to='/cart' className='position-relative text-dark me-2'>
               <FaShoppingCart size={22} />
               {cartItemCount > 0 && (
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                <span className='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
                   {cartItemCount}
                 </span>
               )}
@@ -99,23 +103,23 @@ const Header = () => {
           )}
 
           {isSignedIn ? (
-            <div className="d-flex align-items-center">
+            <div className='d-flex align-items-center'>
               <UserButton />
-              <ul className="dropdown-menu">
+              <ul className='dropdown-menu'>
                 <li>
                   <SignOutButton>
-                    <button className="dropdown-item">Logout</button>
+                    <button className='dropdown-item'>Logout</button>
                   </SignOutButton>
                 </li>
               </ul>
             </div>
           ) : (
             <>
-              <SignInButton mode="modal">
-                <button className="btn btn-outline-primary">Login</button>
+              <SignInButton mode='modal'>
+                <button className='btn btn-outline-primary'>Login</button>
               </SignInButton>
               <button
-                className="btn btn-primary"
+                className='btn btn-primary'
                 onClick={() => setShowSignUpModal(true)}
               >
                 Sign Up

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
+import { API_BASE } from "../config";
 
 const ProductReviewForm = ({ productId, onReviewAdded }) => {
   const { user } = useUser();
@@ -11,7 +12,9 @@ const ProductReviewForm = ({ productId, onReviewAdded }) => {
 
   const fetchUserReview = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/products/${productId}/reviews`);
+      const res = await axios.get(
+        `${API_BASE}/api/products/${productId}/reviews`
+      );
       const existingReview = res.data.find((rev) => rev.userId === user.id);
       if (existingReview) {
         setRating(existingReview.rating);
@@ -38,13 +41,16 @@ const ProductReviewForm = ({ productId, onReviewAdded }) => {
 
     try {
       if (reviewId) {
-        await axios.put(`http://localhost:5000/api/products/${productId}/review/${reviewId}`, {
-          rating,
-          comment,
-        });
+        await axios.put(
+          `${API_BASE}/api/products/${productId}/review/${reviewId}`,
+          {
+            rating,
+            comment,
+          }
+        );
         toast.success("Review updated!");
       } else {
-        await axios.post(`http://localhost:5000/api/products/${productId}/review`, {
+        await axios.post(`${API_BASE}/api/products/${productId}/review`, {
           userId: user.id,
           userName: user.fullName,
           rating,
@@ -61,17 +67,19 @@ const ProductReviewForm = ({ productId, onReviewAdded }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4">
-      <h4 className="mb-2">{reviewId ? "Edit Your Review" : "Add a Review"}</h4>
+    <form onSubmit={handleSubmit} className='mb-4'>
+      <h4 className='mb-2'>{reviewId ? "Edit Your Review" : "Add a Review"}</h4>
 
       {/* Star Rating */}
-      <div className="mb-2">
+      <div className='mb-2'>
         {[1, 2, 3, 4, 5].map((star) => (
           <span
             key={star}
-            className={`mx-1 cursor-pointer ${star <= rating ? "text-warning" : ""}`}
+            className={`mx-1 cursor-pointer ${
+              star <= rating ? "text-warning" : ""
+            }`}
             onClick={() => setRating(star)}
-            role="button"
+            role='button'
             style={{ fontSize: "20px" }}
           >
             ★
@@ -82,12 +90,12 @@ const ProductReviewForm = ({ productId, onReviewAdded }) => {
       <textarea
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        className="form-control mb-2"
-        placeholder="Write your review"
-        rows="3"
+        className='form-control mb-2'
+        placeholder='Write your review'
+        rows='3'
       />
 
-      <button className="btn btn-dark" type="submit">
+      <button className='btn btn-dark' type='submit'>
         {reviewId ? "Update Review" : "Submit Review"}
       </button>
     </form>
