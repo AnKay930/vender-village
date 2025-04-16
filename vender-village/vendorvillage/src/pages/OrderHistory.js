@@ -4,6 +4,7 @@ import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import { API_BASE } from "../config";
 
 export default function OrderHistory() {
   const { user } = useUser();
@@ -16,9 +17,7 @@ export default function OrderHistory() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/order/customer/${userId}`
-        );
+        const res = await axios.get(`${API_BASE}/api/order/customer/${userId}`);
         setOrders(res.data);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -37,9 +36,9 @@ export default function OrderHistory() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-3xl mx-auto mt-10 p-5 bg-white rounded-2xl shadow-2xl"
+      className='max-w-3xl mx-auto mt-10 p-5 bg-white rounded-2xl shadow-2xl'
     >
-      <h2 className="text-3xl font-bold mb-6 text-center">
+      <h2 className='text-3xl font-bold mb-6 text-center'>
         Your Order History
       </h2>
 
@@ -51,10 +50,10 @@ export default function OrderHistory() {
         orders.map((order) => (
           <div
             key={order._id}
-            className="border p-4 rounded-xl mb-5 bg-gray-50"
+            className='border p-4 rounded-xl mb-5 bg-gray-50'
           >
-            <div className="flex justify-between mb-2">
-              <span className="font-semibold">Order Date:</span>
+            <div className='flex justify-between mb-2'>
+              <span className='font-semibold'>Order Date:</span>
               <span>
                 {new Date(order.createdAt).toLocaleDateString("en-US")}
               </span>
@@ -64,33 +63,29 @@ export default function OrderHistory() {
               {order.items.map((item) => (
                 <li
                   key={item.productId?._id || Math.random()}
-                  className="flex justify-between py-1"
+                  className='flex justify-between py-1'
                 >
                   <span>
                     {item.productId?.name || "Unknown Product"} ×{" "}
                     {item.quantity}
                   </span>
                   <span>
-                    $
-                    {(
-                      (item.productId?.price || 0) * item.quantity
-                    ).toFixed(2)}
+                    ${((item.productId?.price || 0) * item.quantity).toFixed(2)}
                   </span>
                 </li>
               ))}
             </ul>
 
-            <hr className="my-2" />
+            <hr className='my-2' />
 
-            <div className="flex justify-between font-bold">
+            <div className='flex justify-between font-bold'>
               <span>Total:</span>
               <span>
                 $
                 {order.items
                   .reduce(
                     (acc, item) =>
-                      acc +
-                      (item.productId?.price || 0) * item.quantity,
+                      acc + (item.productId?.price || 0) * item.quantity,
                     0
                   )
                   .toFixed(2)}
@@ -102,7 +97,7 @@ export default function OrderHistory() {
 
       <button
         onClick={() => navigate("/customer")}
-        className="mt-6 w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition"
+        className='mt-6 w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition'
       >
         Back to Customer Page
       </button>

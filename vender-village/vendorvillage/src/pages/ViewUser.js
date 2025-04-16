@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Alert, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AdminSidebar from "../components/AdminSidebar";
+import { API_BASE } from "../config";
 
 const ViewUsers = () => {
   const [users, setUsers] = useState([]);
@@ -17,7 +18,7 @@ const ViewUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users/all-users");
+      const res = await fetch(`${API_BASE}/api/users/all-users`);
       const data = await res.json();
       setUsers(data);
       setLoading(false);
@@ -36,7 +37,7 @@ const ViewUsers = () => {
     if (!userToDelete) return;
     try {
       const response = await fetch(
-        `http://localhost:5000/api/clerk/delete-user/${userToDelete}`,
+        `${API_BASE}/api/clerk/delete-user/${userToDelete}`,
         {
           method: "DELETE",
         }
@@ -58,13 +59,13 @@ const ViewUsers = () => {
   };
 
   return (
-    <div className="d-flex">
+    <div className='d-flex'>
       <AdminSidebar />
-      <div className="container mt-4">
+      <div className='container mt-4'>
         <h2>View Users</h2>
         {showAlert && (
           <Alert
-            variant="success"
+            variant='success'
             dismissible
             onClose={() => setShowAlert(false)}
           >
@@ -91,8 +92,8 @@ const ViewUsers = () => {
                   <td>{user.role}</td>
                   <td>
                     <Button
-                      variant="danger"
-                      size="sm"
+                      variant='danger'
+                      size='sm'
                       onClick={() => confirmDeleteUser(user.userId)}
                     >
                       Delete
@@ -111,10 +112,10 @@ const ViewUsers = () => {
         </Modal.Header>
         <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant='secondary' onClick={() => setShowModal(false)}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleDeleteUser}>
+          <Button variant='danger' onClick={handleDeleteUser}>
             Delete
           </Button>
         </Modal.Footer>

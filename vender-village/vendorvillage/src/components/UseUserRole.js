@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import { API_BASE } from "../config";
 
 const useUserRole = () => {
   const { user } = useUser();
@@ -9,7 +10,7 @@ const useUserRole = () => {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:5000/api/users/get-user-role?userId=${user.id}`)
+      fetch(`${API_BASE}/api/users/get-user-role?userId=${user.id}`)
         .then((res) => res.json())
         .then((data) => {
           console.log("Fetched Role:", data.role);

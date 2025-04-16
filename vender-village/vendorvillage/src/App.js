@@ -12,6 +12,7 @@ import {
   useAuth,
   useUser,
 } from "@clerk/clerk-react";
+import { API_BASE } from "config";
 
 import AdminPage from "./pages/AdminPage";
 import CustomerPage from "./pages/CustomerPage";
@@ -59,7 +60,7 @@ const AppRoutes = () => {
       if (isSignedIn && userId) {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/users/get-user-role?userId=${userId}`
+            `${API_BASE}/api/users/get-user-role?userId=${userId}`
           );
           const data = await response.json();
           setUserRole(data.role);
@@ -76,25 +77,25 @@ const AppRoutes = () => {
   return userRole === "customer" ? (
     <CartProvider userId={userId}>
       <>
-        <Header userRole="customer" />
+        <Header userRole='customer' />
         <Routes>
-          <Route path="/" element={<Homepage />} /> {/* Added */}
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
+          <Route path='/' element={<Homepage />} /> {/* Added */}
+          <Route path='/sign-in' element={<SignIn />} />
+          <Route path='/sign-up' element={<SignUp />} />
           <Route
-            path="/admin"
+            path='/admin'
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminPage />
               </ProtectedRoute>
             }
           />
-          <Route path="/view-users" element={<ViewUsers />} />
-          <Route path="/add-user" element={<AddUser />} />
-          <Route path="/roles-permissions" element={<RolesPermissions />} />
-          <Route path="/vendor" element={<VendorDashboardWrapper />} />
+          <Route path='/view-users' element={<ViewUsers />} />
+          <Route path='/add-user' element={<AddUser />} />
+          <Route path='/roles-permissions' element={<RolesPermissions />} />
+          <Route path='/vendor' element={<VendorDashboardWrapper />} />
           <Route
-            path="/customer"
+            path='/customer'
             element={
               <ProtectedRoute allowedRoles={["customer"]}>
                 <CustomerPage />
@@ -102,7 +103,7 @@ const AppRoutes = () => {
             }
           />
           <Route
-            path="/product/:id"
+            path='/product/:id'
             element={
               <ProtectedRoute allowedRoles={["customer"]}>
                 <ProductDetail />
@@ -110,7 +111,7 @@ const AppRoutes = () => {
             }
           />
           <Route
-            path="/cart"
+            path='/cart'
             element={
               <ProtectedRoute allowedRoles={["customer"]}>
                 <CartPage />
@@ -118,7 +119,7 @@ const AppRoutes = () => {
             }
           />
           <Route
-            path="/checkout"
+            path='/checkout'
             element={
               <ProtectedRoute allowedRoles={["customer"]}>
                 <CheckoutPage />
@@ -126,14 +127,14 @@ const AppRoutes = () => {
             }
           />
           <Route
-            path="/order-history"
+            path='/order-history'
             element={
               <ProtectedRoute allowedRoles={["customer"]}>
                 <OrderHistory />
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path='*' element={<Navigate to='/' />} />
         </Routes>
       </>
     </CartProvider>
@@ -141,22 +142,22 @@ const AppRoutes = () => {
     <>
       <Header userRole={userRole} />
       <Routes>
-        <Route path="/" element={<Homepage />} /> {/* Added */}
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
+        <Route path='/' element={<Homepage />} /> {/* Added */}
+        <Route path='/sign-in' element={<SignIn />} />
+        <Route path='/sign-up' element={<SignUp />} />
         <Route
-          path="/admin"
+          path='/admin'
           element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <AdminPage />
             </ProtectedRoute>
           }
         />
-        <Route path="/view-users" element={<ViewUsers />} />
-        <Route path="/add-user" element={<AddUser />} />
-        <Route path="/roles-permissions" element={<RolesPermissions />} />
-        <Route path="/vendor" element={<VendorDashboardWrapper />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path='/view-users' element={<ViewUsers />} />
+        <Route path='/add-user' element={<AddUser />} />
+        <Route path='/roles-permissions' element={<RolesPermissions />} />
+        <Route path='/vendor' element={<VendorDashboardWrapper />} />
+        <Route path='*' element={<Navigate to='/' />} />
       </Routes>
     </>
   );
@@ -167,7 +168,7 @@ const App = () => {
     <ClerkProvider publishableKey={clerkFrontendApi}>
       <Router>
         <AppRoutes />
-        <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
+        <ToastContainer position='top-right' autoClose={2000} hideProgressBar />
       </Router>
     </ClerkProvider>
   );

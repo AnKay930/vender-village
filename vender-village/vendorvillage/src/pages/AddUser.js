@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Alert } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AdminSidebar from "../components/AdminSidebar";
+import { API_BASE } from "../config";
 
 const AddUser = () => {
   const [email, setEmail] = useState("");
@@ -19,14 +20,11 @@ const AddUser = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/clerk/create-user",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, role }),
-        }
-      );
+      const response = await fetch(`${API_BASE}/api/clerk/create-user`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, role }),
+      });
 
       const data = await response.json();
 
@@ -56,9 +54,9 @@ const AddUser = () => {
   };
 
   return (
-    <div className="d-flex">
+    <div className='d-flex'>
       <AdminSidebar />
-      <div className="container mt-4">
+      <div className='container mt-4'>
         <h2>Add User</h2>
         {showAlert && (
           <Alert
@@ -70,39 +68,39 @@ const AddUser = () => {
           </Alert>
         )}
         <form onSubmit={handleAddUser}>
-          <div className="mb-3">
+          <div className='mb-3'>
             <label>Email</label>
             <input
-              type="email"
-              className="form-control"
+              type='email'
+              className='form-control'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
-          <div className="mb-3">
+          <div className='mb-3'>
             <label>Password</label>
             <input
-              type="password"
-              className="form-control"
+              type='password'
+              className='form-control'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <div className="mb-3">
+          <div className='mb-3'>
             <label>Role</label>
             <select
-              className="form-control"
+              className='form-control'
               value={role}
               onChange={(e) => setRole(e.target.value)}
             >
-              <option value="customer">Customer</option>
-              <option value="vendor">Vendor</option>
-              <option value="admin">Admin</option>
+              <option value='customer'>Customer</option>
+              <option value='vendor'>Vendor</option>
+              <option value='admin'>Admin</option>
             </select>
           </div>
-          <button type="submit" className="btn btn-primary" disabled={loading}>
+          <button type='submit' className='btn btn-primary' disabled={loading}>
             {loading ? "Adding User..." : "Add User"}
           </button>
         </form>
