@@ -12,7 +12,7 @@ import {
   useAuth,
   useUser,
 } from "@clerk/clerk-react";
-import { API_BASE } from "config";
+import { API_BASE } from "./config";
 
 import AdminPage from "./pages/AdminPage";
 import CustomerPage from "./pages/CustomerPage";
