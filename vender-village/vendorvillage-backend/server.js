@@ -13,13 +13,17 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],
+    credentials: true,
   })
 );
+
+console.log("CORS Origin:", process.env.CLIENT_URL);
 
 const productRoutes = require("./routes/products");
 app.use("/api/products", productRoutes);
@@ -36,6 +40,7 @@ app.use("/api/clerk", clerkRoutes);
 app.use("/api/vendor", vendorRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
+
 app.get("/", (req, res) => {
   res.send("🚀 API is running...");
 });
