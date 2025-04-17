@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "../styles/CartPage.css";
 
 const CartPage = () => {
-  const { cart, removeFromCart, clearCart } = useCart();
+  const { cart, removeFromCart, clearCart, updateQuantity } = useCart();
   const navigate = useNavigate();
 
   const handleRemove = (productId) => {
@@ -16,6 +16,12 @@ const CartPage = () => {
   const handleClearCart = () => {
     clearCart();
     toast.warn("Cart cleared.");
+  };
+
+  const handleQuantityChange = (productId, newQty) => {
+    if (newQty >= 1) {
+      updateQuantity(productId, newQty);
+    }
   };
 
   const total = cart.items.reduce(
@@ -44,13 +50,30 @@ const CartPage = () => {
                   <img src={image} alt={name} />
                   <div className="item-info">
                     <h4>{name}</h4>
-                    <p>
-                      ${price.toFixed(2)} × {item.quantity}
-                    </p>
+                    <p>${price.toFixed(2)}</p>
+                    <div className="quantity-controls">
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(product._id, item.quantity - 1)
+                        }
+                        className="qty-btn decrease"
+                      >
+                        −
+                      </button>
+                      <span className="qty-count">{item.quantity}</span>
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(product._id, item.quantity + 1)
+                        }
+                        className="qty-btn increase"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                   <button
                     className="remove-btn"
-                    onClick={() => handleRemove(product?._id)}
+                    onClick={() => handleRemove(product._id)}
                   >
                     Remove
                   </button>

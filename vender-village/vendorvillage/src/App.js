@@ -17,7 +17,7 @@ import AdminPage from "./pages/AdminPage";
 import CustomerPage from "./pages/CustomerPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Header from "./components/Header";
-import Homepage from "./pages/Homepage"; // Added
+import Homepage from "./pages/Homepage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AddUser from "./pages/AddUser";
 import ViewUsers from "./pages/ViewUser";
@@ -141,7 +141,7 @@ const AppRoutes = () => {
     <>
       <Header userRole={userRole} />
       <Routes>
-        <Route path="/" element={<Homepage />} /> {/* Added */}
+        <Route path="/" element={<Homepage />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route

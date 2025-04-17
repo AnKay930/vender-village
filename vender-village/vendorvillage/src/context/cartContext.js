@@ -47,6 +47,23 @@ const CartProvider = ({ userId, children }) => {
     }
   };
 
+  // Update quantity
+  const updateQuantity = async (productId, quantity) => {
+    if (quantity < 1) return;
+
+    try {
+      const res = await axios.put("http://localhost:5000/api/cart/update", {
+        userId,
+        productId,
+        quantity,
+      });
+      setCart(res.data);
+    } catch (err) {
+      console.error("Error updating quantity:", err);
+      toast.error("Failed to update quantity.");
+    }
+  };
+
   // Remove item from cart
   const removeFromCart = async (productId) => {
     try {
@@ -79,6 +96,7 @@ const CartProvider = ({ userId, children }) => {
         cart,
         loading,
         addToCart,
+        updateQuantity,
         removeFromCart,
         clearCart,
       }}
