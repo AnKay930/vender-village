@@ -11,15 +11,17 @@ const orderRoutes = require("./routes/orderRoutes");
 dotenv.config();
 
 const app = express();
-
 app.use(express.json());
+
+// Updated CORS to allow both client URLs
+const allowedOrigins = [process.env.CLIENT_URL, process.env.CLIENT_URL2];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    const allowedOrigins = [process.env.CLIENT_URL];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.error(` CORS blocked origin: ${origin}`);
       callback(new Error("Not allowed by CORS"));
     }
   },
@@ -29,8 +31,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-console.log("CORS Origin:", process.env.CLIENT_URL);
+console.log(" CORS Allowed Origins:", allowedOrigins);
 
+// Routes
 const productRoutes = require("./routes/products");
 app.use("/api/products", productRoutes);
 
