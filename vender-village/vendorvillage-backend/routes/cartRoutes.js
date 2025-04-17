@@ -56,6 +56,27 @@ router.delete("/remove", async (req, res) => {
   }
 });
 
+// Update item quantity in cart (PUT /update)
+router.put("/update", async (req, res) => {
+  const { userId, productId, quantity } = req.body;
+
+  try {
+    const cart = await Cart.findOne({ userId });
+    if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+    const item = cart.items.find(item => item.productId.toString() === productId);
+    if (!item) return res.status(404).json({ error: "Item not found in cart" });
+
+    item.quantity = quantity;
+    await cart.save();
+
+    const populatedCart = await Cart.findById(cart._id).populate("items.productId");
+    res.json(populatedCart);
+  } catch (err) {
+    res.status(500).json({ error: "Error updating quantity" });
+  }
+});
+
 // Clear cart
 router.delete("/clear/:userId", async (req, res) => {
   try {
