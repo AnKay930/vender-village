@@ -33,6 +33,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const clerkFrontendApi = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
+const API_URL = process.env.REACT_APP_API_URL;
 
 if (!clerkFrontendApi || !clerkFrontendApi.startsWith("pk_")) {
   throw new Error(
@@ -59,7 +60,7 @@ const AppRoutes = () => {
       if (isSignedIn && userId) {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/users/get-user-role?userId=${userId}`
+            `${API_URL}/api/users/get-user-role?userId=${userId}`
           );
           const data = await response.json();
           setUserRole(data.role);
@@ -78,7 +79,7 @@ const AppRoutes = () => {
       <>
         <Header userRole="customer" />
         <Routes>
-          <Route path="/" element={<Homepage />} /> {/* Added */}
+          <Route path="/" element={<Homepage />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route

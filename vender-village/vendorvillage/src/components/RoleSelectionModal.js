@@ -36,21 +36,23 @@ const RoleSelectionModal = ({ show, onClose }) => {
   const checkAndStoreUser = async (user) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/get-user-role?userId=${user.id}`
+        `${process.env.REACT_APP_API_URL}/api/users/get-user-role?userId=${user.id}`
       );
       const data = await response.json();
 
       if (!data.role) {
         await storeUserInMongo(user);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error checking user role:", error);
+    }
   };
 
   const storeUserInMongo = async (user) => {
     const role = localStorage.getItem("selectedRole") || "customer";
 
     try {
-      await fetch("http://localhost:5000/api/users/register-user", {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/users/register-user`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -68,7 +70,9 @@ const RoleSelectionModal = ({ show, onClose }) => {
       setTimeout(() => {
         navigate("/sign-in");
       }, 3000);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error registering user:", error);
+    }
   };
 
   return (

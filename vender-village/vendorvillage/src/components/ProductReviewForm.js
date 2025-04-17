@@ -11,7 +11,7 @@ const ProductReviewForm = ({ productId, onReviewAdded }) => {
 
   const fetchUserReview = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/products/${productId}/reviews`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${productId}/reviews`);
       const existingReview = res.data.find((rev) => rev.userId === user.id);
       if (existingReview) {
         setRating(existingReview.rating);
@@ -38,13 +38,13 @@ const ProductReviewForm = ({ productId, onReviewAdded }) => {
 
     try {
       if (reviewId) {
-        await axios.put(`http://localhost:5000/api/products/${productId}/review/${reviewId}`, {
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/products/${productId}/review/${reviewId}`, {
           rating,
           comment,
         });
         toast.success("Review updated!");
       } else {
-        await axios.post(`http://localhost:5000/api/products/${productId}/review`, {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/products/${productId}/review`, {
           userId: user.id,
           userName: user.fullName,
           rating,

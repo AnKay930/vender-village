@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function Checkout() {
   const { cart, clearCart } = useCart();
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const {
     register,
@@ -22,7 +23,7 @@ export default function Checkout() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/order/create", {
+      await axios.post(`${API_URL}/api/order/create`, {
         userId: cart.userId,
         items: cart.items,
         customerDetails: data,
@@ -50,7 +51,6 @@ export default function Checkout() {
     >
       <h2 className="text-3xl font-bold mb-6 text-center">Checkout</h2>
 
-      {/* Cart Summary */}
       <div className="mb-6">
         <h3 className="text-xl font-semibold mb-2">Order Summary:</h3>
         {cart.items.map((item) => (
@@ -68,9 +68,7 @@ export default function Checkout() {
         </div>
       </div>
 
-      {/* Checkout Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        {/* Customer Info */}
         <div>
           <label className="block text-sm font-semibold">Full Name</label>
           <input
@@ -164,7 +162,6 @@ export default function Checkout() {
           {errors.country && <p className="text-red-500 text-sm">Country is required</p>}
         </div>
 
-        {/* Payment Section */}
         <hr className="my-6" />
         <h3 className="text-xl font-semibold mb-4">Payment Details</h3>
 

@@ -37,6 +37,8 @@ const VendorDashboard = ({ vendorId }) => {
     brand: "",
   });
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     if (vendorId) fetchProducts();
   }, [vendorId]);
@@ -45,9 +47,7 @@ const VendorDashboard = ({ vendorId }) => {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(
-        `http://localhost:5000/api/vendor/vendor-products/${vendorId}`
-      );
+      const res = await fetch(`${API_URL}/api/vendor/vendor-products/${vendorId}`);
       if (!res.ok) throw new Error("Failed to fetch products.");
       const data = await res.json();
       setProducts(data);
@@ -62,14 +62,11 @@ const VendorDashboard = ({ vendorId }) => {
 
   const handleAddProduct = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/vendor/add-product`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...newProduct, vendorId }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/vendor/add-product`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...newProduct, vendorId }),
+      });
       if (!res.ok) throw new Error("Failed to add product.");
       setNewProduct({
         name: "",
@@ -90,12 +87,9 @@ const VendorDashboard = ({ vendorId }) => {
 
   const handleDeleteProduct = async (productId) => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/vendor/delete-product/${productId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(`${API_URL}/api/vendor/delete-product/${productId}`, {
+        method: "DELETE",
+      });
       if (!res.ok) throw new Error("Failed to delete product.");
       fetchProducts();
     } catch (err) {
@@ -111,14 +105,11 @@ const VendorDashboard = ({ vendorId }) => {
 
   const handleUpdateProduct = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/vendor/update-product/${editingProduct._id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(editingProduct),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/vendor/update-product/${editingProduct._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editingProduct),
+      });
       if (!res.ok) throw new Error("Failed to update product.");
       fetchProducts();
       setShowEditModal(false);

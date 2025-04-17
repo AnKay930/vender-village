@@ -16,9 +16,11 @@ const CustomerPage = () => {
     reviews: 0,
   });
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/products")
+      .get(`${API_URL}/api/products`)
       .then((res) => {
         setAllProducts(res.data);
         setLoading(false);
@@ -27,7 +29,7 @@ const CustomerPage = () => {
         console.error("Error fetching products:", err);
         setLoading(false);
       });
-  }, []);
+  }, [API_URL]);
 
   const handleFilterChange = (newFilters) => {
     const updated = { ...filters, ...newFilters };
@@ -64,14 +66,14 @@ const CustomerPage = () => {
       : 1000;
 
   return (
-    <div className='customer-page'>
-      <div className='filter-toggle'>
+    <div className="customer-page">
+      <div className="filter-toggle">
         <button onClick={() => setShowFilters(!showFilters)}>
           {showFilters ? "Hide Filters" : "Show Filters"}
         </button>
       </div>
 
-      <div className='main-content'>
+      <div className="main-content">
         <div className={`filter-wrapper ${showFilters ? "open" : "collapsed"}`}>
           <Filters
             filters={filters}
@@ -80,7 +82,7 @@ const CustomerPage = () => {
           />
         </div>
 
-        <div className='products-section'>
+        <div className="products-section">
           {loading ? (
             <p>Loading products...</p>
           ) : filtered.length > 0 ? (

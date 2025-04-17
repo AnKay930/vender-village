@@ -9,7 +9,7 @@ const ProductReviews = ({ productId }) => {
   const fetchReviews = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/products/${productId}/reviews`
+        `${process.env.REACT_APP_API_URL}/api/products/${productId}/reviews`
       );
       setReviews(res.data);
     } catch (error) {
@@ -43,7 +43,6 @@ const ProductReviews = ({ productId }) => {
             <small className="text-muted">
               {new Date(review.createdAt).toLocaleDateString()}
             </small>
-            {/* Optional: Highlight current user's review */}
             {user?.id === review.userId && (
               <span className="badge bg-primary ms-2">Your Review</span>
             )}

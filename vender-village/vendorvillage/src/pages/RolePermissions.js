@@ -10,13 +10,15 @@ const RolesPermissions = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users/all-users");
+      const res = await fetch(`${API_URL}/api/users/all-users`);
       const data = await res.json();
       setUsers(data);
       setUpdatedRoles(
@@ -38,7 +40,7 @@ const RolesPermissions = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/update-role/${userId}`,
+        `${API_URL}/api/users/update-role/${userId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

@@ -12,12 +12,13 @@ export const useCart = () => useContext(CartContext);
 const CartProvider = ({ userId, children }) => {
   const [cart, setCart] = useState({ userId, items: [] });
   const [loading, setLoading] = useState(true);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   // Fetch cart on userId change
   useEffect(() => {
     if (userId) {
       axios
-        .get(`http://localhost:5000/api/cart/${userId}`)
+        .get(`${API_URL}/api/cart/${userId}`)
         .then((res) => {
           setCart(res.data || { userId, items: [] });
         })
@@ -29,12 +30,12 @@ const CartProvider = ({ userId, children }) => {
           setLoading(false);
         });
     }
-  }, [userId]);
+  }, [userId, API_URL]);
 
   // Add item to cart
   const addToCart = async (productId, quantity = 1) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/cart/add", {
+      const res = await axios.post(`${API_URL}/api/cart/add`, {
         userId,
         productId,
         quantity,
@@ -52,7 +53,7 @@ const CartProvider = ({ userId, children }) => {
     if (quantity < 1) return;
 
     try {
-      const res = await axios.put("http://localhost:5000/api/cart/update", {
+      const res = await axios.post(`${API_URL}/api/cart/update-quantity`, {
         userId,
         productId,
         quantity,
@@ -67,7 +68,7 @@ const CartProvider = ({ userId, children }) => {
   // Remove item from cart
   const removeFromCart = async (productId) => {
     try {
-      const res = await axios.delete("http://localhost:5000/api/cart/remove", {
+      const res = await axios.delete(`${API_URL}/api/cart/remove`, {
         data: { userId, productId },
       });
       setCart(res.data);
@@ -81,7 +82,7 @@ const CartProvider = ({ userId, children }) => {
   // Clear cart
   const clearCart = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/cart/clear/${userId}`);
+      await axios.delete(`${API_URL}/api/cart/clear/${userId}`);
       setCart({ userId, items: [] });
       toast.warn("Cart cleared.");
     } catch (err) {

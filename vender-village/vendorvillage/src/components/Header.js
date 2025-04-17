@@ -30,7 +30,7 @@ const Header = () => {
       if (isSignedIn && user && !userRole) {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/users/get-user-role?userId=${user.id}`
+            `${process.env.REACT_APP_API_URL}/api/users/get-user-role?userId=${user.id}`
           );
           const data = await response.json();
           setUserRole(data.role);

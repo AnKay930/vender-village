@@ -10,13 +10,14 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-
   const [product, setProduct] = useState(null);
+
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/`);
+        const res = await axios.get(`${API_URL}/api/products`);
         const allProducts = res.data;
         const foundProduct = allProducts.find((p) => p._id === id);
         setProduct(foundProduct);
@@ -26,7 +27,7 @@ const ProductDetail = () => {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [id, API_URL]);
 
   if (!product) {
     return <p className="text-center mt-5">Loading product...</p>;

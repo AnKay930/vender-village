@@ -11,13 +11,15 @@ const ViewUsers = () => {
   const [showModal, setShowModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users/all-users");
+      const res = await fetch(`${API_URL}/api/users/all-users`);
       const data = await res.json();
       setUsers(data);
       setLoading(false);
@@ -36,7 +38,7 @@ const ViewUsers = () => {
     if (!userToDelete) return;
     try {
       const response = await fetch(
-        `http://localhost:5000/api/clerk/delete-user/${userToDelete}`,
+        `${API_URL}/api/clerk/delete-user/${userToDelete}`,
         {
           method: "DELETE",
         }

@@ -13,12 +13,12 @@ export default function OrderHistory() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/order/customer/${userId}`
-        );
+        const res = await axios.get(`${API_URL}/api/order/customer/${userId}`);
         setOrders(res.data);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -31,7 +31,7 @@ export default function OrderHistory() {
     if (userId) {
       fetchOrders();
     }
-  }, [userId]);
+  }, [userId, API_URL]);
 
   return (
     <motion.div
@@ -39,9 +39,7 @@ export default function OrderHistory() {
       animate={{ opacity: 1, y: 0 }}
       className="max-w-3xl mx-auto mt-10 p-5 bg-white rounded-2xl shadow-2xl"
     >
-      <h2 className="text-3xl font-bold mb-6 text-center">
-        Your Order History
-      </h2>
+      <h2 className="text-3xl font-bold mb-6 text-center">Your Order History</h2>
 
       {loading ? (
         <p>Loading your orders...</p>
@@ -49,15 +47,10 @@ export default function OrderHistory() {
         <p>You have not placed any orders yet.</p>
       ) : (
         orders.map((order) => (
-          <div
-            key={order._id}
-            className="border p-4 rounded-xl mb-5 bg-gray-50"
-          >
+          <div key={order._id} className="border p-4 rounded-xl mb-5 bg-gray-50">
             <div className="flex justify-between mb-2">
               <span className="font-semibold">Order Date:</span>
-              <span>
-                {new Date(order.createdAt).toLocaleDateString("en-US")}
-              </span>
+              <span>{new Date(order.createdAt).toLocaleDateString("en-US")}</span>
             </div>
 
             <ul>
@@ -67,14 +60,10 @@ export default function OrderHistory() {
                   className="flex justify-between py-1"
                 >
                   <span>
-                    {item.productId?.name || "Unknown Product"} ×{" "}
-                    {item.quantity}
+                    {item.productId?.name || "Unknown Product"} × {item.quantity}
                   </span>
                   <span>
-                    $
-                    {(
-                      (item.productId?.price || 0) * item.quantity
-                    ).toFixed(2)}
+                    ${((item.productId?.price || 0) * item.quantity).toFixed(2)}
                   </span>
                 </li>
               ))}
@@ -88,9 +77,7 @@ export default function OrderHistory() {
                 $
                 {order.items
                   .reduce(
-                    (acc, item) =>
-                      acc +
-                      (item.productId?.price || 0) * item.quantity,
+                    (acc, item) => acc + (item.productId?.price || 0) * item.quantity,
                     0
                   )
                   .toFixed(2)}

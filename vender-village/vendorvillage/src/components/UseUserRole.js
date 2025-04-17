@@ -9,7 +9,7 @@ const useUserRole = () => {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:5000/api/users/get-user-role?userId=${user.id}`)
+      fetch(`${process.env.REACT_APP_API_URL}/api/users/get-user-role?userId=${user.id}`)
         .then((res) => res.json())
         .then((data) => {
           console.log("Fetched Role:", data.role);
